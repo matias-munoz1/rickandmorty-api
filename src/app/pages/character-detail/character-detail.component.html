@@ -1,0 +1,75 @@
+<div class="card">
+  <h2>{{ character?.name }}</h2>
+  <div class="card-header">
+    <img
+      *ngIf="character?.image"
+      [src]="character.image"
+      [alt]="character.name"
+      class="character-image"
+    />
+  </div>
+
+  <div class="card-body">
+    <div class="basic-info">
+      <p><strong>Status:</strong> {{ character.status }}</p>
+      <p><strong>Species:</strong> {{ character.species }}</p>
+      <p><strong>Type:</strong> {{ character.type || 'Unknown' }}</p>
+      <p><strong>Gender:</strong> {{ character?.gender }}</p>
+      <p><strong>Created:</strong> {{ character?.created | date:'short' }}</p>
+    </div>
+
+    <div class="info-block">
+      <h3>Origen</h3>
+      <ng-container *ngIf="!noOrigin; else noOriginTemplate">
+        <p><strong>Nombre:</strong> {{ originInfo?.name || 'Sin datos' }}</p>
+        <p><strong>Tipo:</strong> {{ originInfo?.type || 'N/A' }}</p>
+        <p><strong>Dimensión:</strong> {{ originInfo?.dimension || 'N/A' }}</p>
+        <p>
+          <strong>Residente Ejemplo:</strong>
+          <span *ngIf="originResidentName; else noResidentOrigin">
+            {{ originResidentName }}
+          </span>
+          <ng-template #noResidentOrigin>
+            Sin residentes
+          </ng-template>
+        </p>
+      </ng-container>
+    </div>
+    <ng-template #noOriginTemplate>
+      <p>Sin información de origen.</p>
+    </ng-template>
+
+    <div class="info-block">
+      <h3>Localización</h3>
+      <ng-container *ngIf="!noLocation; else noLocationTemplate">
+        <p><strong>Nombre:</strong> {{ locationInfo?.name || 'Sin datos' }}</p>
+        <p><strong>Tipo:</strong> {{ locationInfo?.type || 'N/A' }}</p>
+        <p><strong>Dimensión:</strong> {{ locationInfo?.dimension || 'N/A' }}</p>
+        <p>
+          <strong>Residente Ejemplo:</strong>
+          <span *ngIf="locationResidentName; else noResidentLocation">
+            {{ locationResidentName }}
+          </span>
+          <ng-template #noResidentLocation>
+            Sin residentes
+          </ng-template>
+        </p>
+      </ng-container>
+    </div>
+    <ng-template #noLocationTemplate>
+      <p>Sin información de localización.</p>
+    </ng-template>
+
+    <div class="info-block">
+      <h3>Episodio</h3>
+      <ng-container *ngIf="!noEpisode; else noEpisodeTemplate">
+        <p><strong>Nombre:</strong> {{ oneEpisode?.name }}</p>
+        <p><strong>Air Date:</strong> {{ oneEpisode?.air_date }}</p>
+        <p><strong>Episode:</strong> {{ oneEpisode?.episode }}</p>
+      </ng-container>
+    </div>
+    <ng-template #noEpisodeTemplate>
+      <p>Este personaje no tiene episodios.</p>
+    </ng-template>
+  </div>
+</div>

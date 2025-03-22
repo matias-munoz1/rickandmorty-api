@@ -1,0 +1,122 @@
+<div class="page-container">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-right">
+      <h2>FAVORITO</h2>
+      <div *ngIf="favoriteCharacter" class="favorite-info" (click)="onSelectFavorite()">
+        <span class="favorite-name">{{ favoriteCharacter.name }}</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-content">
+    
+    <div class="left-column">
+      <h3>LISTADO DE RESULTADOS (TABLA PAGINADA)</h3>
+
+      <div class="filters">
+        <input
+          type="text"
+          [(ngModel)]="nameFilter"
+          placeholder="Buscar por nombre"
+          (keyup.enter)="onSearch()"
+        />
+        <select [(ngModel)]="statusFilter" (change)="onSearch()">
+          <option value="">-- Estado --</option>
+          <option value="alive">Alive</option>
+          <option value="dead">Dead</option>
+          <option value="unknown">Unknown</option>
+        </select>
+        <button (click)="onSearch()">Buscar</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Species</th>
+            <th>Type</th>
+            <th>Gender</th>
+            <th>Created</th>
+            <th>Favorito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let character of characters"
+            (click)="onSelectCharacter(character)"
+          >
+            <td>{{ character.name }}</td>
+            <td>
+              <span
+                class="status-dot"
+                [ngClass]="{
+                  'alive': character.status === 'Alive',
+                  'dead': character.status === 'Dead',
+                  'unknown': character.status === 'unknown'
+                }"
+              ></span>
+              {{ character.status }}
+            </td>
+            <td>{{ character.species }}</td>
+            <td>{{ character.type || 'Unknown' }}</td>
+            <td>{{ character.gender }}</td>
+            <td>{{ character.created | date:'short' }}</td>
+            <td>
+              <button (click)="onFavorite(character); $event.stopPropagation()">
+                Favorito
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button
+          [disabled]="currentPage === 1"
+          (click)="fetchCharacters(currentPage - 1)"
+        >
+          Anterior
+        </button>
+        <span>Página {{ currentPage }} de {{ totalPages }}</span>
+        <button
+          [disabled]="currentPage === totalPages"
+          (click)="fetchCharacters(currentPage + 1)"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
+      <app-character-detail
+        *ngIf="selectedCharacter"
+        [character]="selectedCharacter"
+      ></app-character-detail>
+
+  </div>
+
+  <footer class="footer-tabs">
+    <div class="tab-buttons">
+      <button (click)="activeTab = 'species'"> TOTAL SPECIES</button>
+      <button (click)="activeTab = 'types'"> TOTAL TYPES</button>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab === 'species'">
+      <h4>Totales por Species</h4>
+      <ul>
+        <li *ngFor="let item of speciesCounts">
+          {{ item.key }}: {{ item.count }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab === 'types'">
+      <h4>Totales por Type</h4>
+      <ul>
+        <li *ngFor="let item of typeCounts">
+          {{ item.key }}: {{ item.count }}
+        </li>
+      </ul>
+    </div>
+  </footer>
+</div>
