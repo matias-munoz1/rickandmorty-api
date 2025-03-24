@@ -1,59 +1,52 @@
-# ZendaPruebaApi
+# RickandMorty-API
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.4.
+Proyecto de prueba para la API de Rick and Morty desarrollado con Angular 14+.  
+Demuestra técnicas avanzadas como carga progresiva de datos, integración dual (REST y GraphQL), uso de Angular Material, directivas, pipes, widgets personalizados y gestión de estado con NgRx.
 
-## Development server
+---
 
-To start a local development server, run:
+## Características
 
-```bash
-ng serve
-```
+- **Listado de personajes:** Visualiza nombre, estado, especie, tipo, género y fecha de creación.
+- **Filtros:** Búsqueda por texto y filtros configurables.
+- **Detalles del personaje:** Al seleccionar, se muestran la imagen, origen, localización y un episodio (si existe).
+- **Favoritos:** Permite marcar personajes como favoritos y visualizarlos.
+- **Totales:** Muestra conteos por especie y tipo.
+- **Carga progresiva:** Los datos se solicitan en bloques o páginas (paginación/infinite scroll).
+- **Integración dual:** Soporte para REST y GraphQL mediante inyección de dependencias.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Instalación
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. **Clonar el repositorio:**
 
-```bash
-ng generate component component-name
-```
+   ```bash
+   git clone https://github.com/matias-munoz1/rickandmorty-api.git
+    ```
+2. **Instalar dependencias:**
+   ```bash
+     npm install
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+# Desarrollo
+  **Inicia el servidor de desarrollo:**
+   ```bash
+    ng serve
+   ```
+---
 
-```bash
-ng generate --help
-```
+# Notas
+- **Carga progresiva:** Los datos se solicitan en bloques o páginas para optimizar el rendimiento.
+- **Vistas condicionales:** Elementos del layout (por ejemplo, botones de “Obtener personaje aleatorio” y “Cambiar API”) se muestran solo en las rutas /rest y /graphql.
+- **Gestión de estado:** Se utiliza NgRx para manejar funcionalidades como favoritos y el historial de personajes vistos.
+- **Integración REST/GraphQL:** La inyección de dependencias permite reutilizar componentes tanto para REST como para GraphQL.
 
-## Building
+---
 
-To build the project run:
+## Recursos
 
-```bash
-ng build
-```
+- [Angular CLI](https://angular.dev/tools/cli)  
+  Herramienta oficial para desarrollar aplicaciones con Angular.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [API de Rick and Morty](https://rickandmortyapi.com)  
+  Documentación y endpoints oficiales para acceder a los datos de la API.
