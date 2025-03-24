@@ -1,4 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    density: 0,
+  ));
+}@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
 
 :root {
   --bg-color: #424242;         
@@ -10,6 +24,7 @@
   --error-color: #d63031;
   --error-hover: #c0392b;
   --header-bg: linear-gradient(90deg, #505050, #757575); 
+  --mdc-outlined-text-field-label-text-color: #1a1b1f !important;
 }
 * {
   font-family: 'Poppins', sans-serif !important;
@@ -27,3 +42,152 @@ body {
 .hidden {
   display: none !important;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Fuerza la clase .material-icons a usar la fuente oficial */
+::ng-deep .material-icons {
+  font-family: "Material Icons" !important;
+  font-style: normal;
+  font-weight: normal;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+/***************************************************
+ * TABLA MATERIAL
+ ***************************************************/
+ table.mat-elevation-z4 {
+  background-color: var(--bg-alt-color);
+  box-shadow: none;
+}
+
+.mat-header-row {
+  background-color: var(--bg-alt-color);
+}
+
+.mat-header-cell {
+  color: var(--text-color) !important;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #4a4a4a;
+}
+
+.mat-row:hover {
+  background-color: #5a5a5a;
+}
+
+.mat-cell {
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+
+/***************************************************
+ * BOTONES
+ ***************************************************/
+button[mat-raised-button] {
+  background-color: var(--accent-color) !important;
+  color: #fff !important;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
+  &:hover {
+    background-color: var(--accent-hover) !important;
+  }
+}
+button[mat-raised-button].favorite-btn {
+  background-color: #ff4757 !important; /* rojo intenso */
+  &:hover {
+    background-color: #ff2b45 !important; /* tono más oscuro al hover */
+  }
+}
+
+.pagination {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination button[mat-raised-button] {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.status-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.alive {
+  background-color: #2ecc71;
+}
+.dead {
+  background-color: #e74c3c;
+}
+.unknown {
+  background-color: #7f8c8d;
+}
+ .filters {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+::ng-deep .filters mat-form-field {
+  width: 200px; 
+
+  .mat-form-field-label,
+  .mat-label {
+    color: #ffffff !important; 
+  }
+
+  .mat-input-element {
+    color: #ffffff !important; 
+    &::placeholder {
+      color: #cccccc !important; 
+      opacity: 1 !important;
+    }
+  }
+
+  .mat-select-value-text,
+  .mat-select-arrow {
+    color: #ffffff !important; 
+  }
+
+  .mat-form-field-outline,
+  .mat-form-field-outline-thick {
+    stroke: #cccccc !important; 
+  }
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: #1a1b1f !important;
+}
+
+::ng-deep input.mat-mdc-input-element {
+  color: #1a1b1f !important;
+  &::placeholder {
+    color: #1a1b1f!important;
+    opacity: 1 !important;
+  }
+}
+
+::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing,
+::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__notch {
+  border-color: #1a1b1f !important;
+  border-style: solid !important;
+}
+

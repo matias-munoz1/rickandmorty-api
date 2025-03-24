@@ -1,5 +1,4 @@
 <div class="page-container">
-  <!-- HEADER -->
   <header class="header">
     <div class="header-right">
       <h2>FAVORITO</h2>
@@ -7,73 +6,115 @@
         <span class="favorite-name">{{ favoriteCharacter.name }}</span>
       </div>
     </div>
+
+    
   </header>
 
   <div class="main-content">
-    
     <div class="left-column">
-      <h3>LISTADO DE RESULTADOS (TABLA PAGINADA)</h3>
+      <h3>LISTADO DE RESULTADOS</h3>
 
       <div class="filters">
-        <input
-          type="text"
-          [(ngModel)]="nameFilter"
-          placeholder="Buscar por nombre"
-          (keyup.enter)="onSearch()"
-        />
-        <select [(ngModel)]="statusFilter" (change)="onSearch()">
-          <option value="">-- Estado --</option>
-          <option value="alive">Alive</option>
-          <option value="dead">Dead</option>
-          <option value="unknown">Unknown</option>
-        </select>
-        <button (click)="onSearch()">Buscar</button>
+        <mat-form-field appearance="outline">
+          <mat-label>Buscar por nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            [formControl]="searchControl"
+            style="color: #ffffff !important; caret-color: #ffffff !important;"
+            placeholder="Escribe aquí..."
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select [formControl]="statusControl">
+            <mat-option value="">-- All --</mat-option>
+            <mat-option value="alive">Alive</mat-option>
+            <mat-option value="dead">Dead</mat-option>
+            <mat-option value="unknown">Unknown</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="onSearch()">Buscar</button>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Species</th>
-            <th>Type</th>
-            <th>Gender</th>
-            <th>Created</th>
-            <th>Favorito</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let character of characters"
-            (click)="onSelectCharacter(character)"
-          >
-            <td>{{ character.name }}</td>
-            <td>
-              <span
-                class="status-dot"
-                [ngClass]="{
-                  'alive': character.status === 'Alive',
-                  'dead': character.status === 'Dead',
-                  'unknown': character.status === 'unknown'
-                }"
-              ></span>
-              {{ character.status }}
-            </td>
-            <td>{{ character.species }}</td>
-            <td>{{ character.type || 'Unknown' }}</td>
-            <td>{{ character.gender }}</td>
-            <td>{{ character.created | date:'short' }}</td>
-            <td>
-              <button (click)="onFavorite(character); $event.stopPropagation()">
-                Favorito
-              </button>
-            </td>
-          </tr>
-        </tbody>
+      <table mat-table [dataSource]="characters" class="mat-elevation-z4">
+ 
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let character">{{ character.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let character">
+            <span class="status-dot" [ngClass]="{
+              'alive': character.status === 'Alive',
+              'dead': character.status === 'Dead',
+              'unknown': character.status === 'unknown'
+            }"></span>
+            {{ character.status }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="species">
+          <th mat-header-cell *matHeaderCellDef> Species </th>
+          <td mat-cell *matCellDef="let character">{{ character.species }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef> Type </th>
+          <td mat-cell *matCellDef="let character">{{ character.type || 'Unknown' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="gender">
+          <th mat-header-cell *matHeaderCellDef> Gender </th>
+          <td mat-cell *matCellDef="let character">{{ character.gender }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="created">
+          <th mat-header-cell *matHeaderCellDef> Created </th>
+          <td mat-cell *matCellDef="let character">
+            {{ character.created | timeAgo }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="favorite">
+          <th mat-header-cell *matHeaderCellDef> Favorito </th>
+          <td mat-cell *matCellDef="let character">
+            <button
+              mat-raised-button
+              class="favorite-btn"
+              (click)="onFavorite(character); $event.stopPropagation()"
+            >
+              <svg
+                style="width:1em;height:1em;fill:currentColor;margin-right:0.4rem;vertical-align:middle;"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"
+                ></path>
+              </svg>
+              Favorito
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+          (click)="onSelectCharacter(row)"
+          appHighlightOnHover
+          [highlightColor]="'lightblue'"
+        ></tr>
       </table>
 
       <div class="pagination">
         <button
+          mat-raised-button
+          color="primary"
           [disabled]="currentPage === 1"
           (click)="fetchCharacters(currentPage - 1)"
         >
@@ -81,6 +122,8 @@
         </button>
         <span>Página {{ currentPage }} de {{ totalPages }}</span>
         <button
+          mat-raised-button
+          color="primary"
           [disabled]="currentPage === totalPages"
           (click)="fetchCharacters(currentPage + 1)"
         >
@@ -88,17 +131,17 @@
         </button>
       </div>
     </div>
-      <app-character-detail
-        *ngIf="selectedCharacter"
-        [character]="selectedCharacter"
-      ></app-character-detail>
 
+    <app-character-detail
+      *ngIf="selectedCharacter"
+      [character]="selectedCharacter"
+    ></app-character-detail>
   </div>
 
   <footer class="footer-tabs">
     <div class="tab-buttons">
-      <button (click)="activeTab = 'species'"> TOTAL SPECIES</button>
-      <button (click)="activeTab = 'types'"> TOTAL TYPES</button>
+      <button mat-raised-button color="primary" (click)="activeTab = 'species'">TOTAL SPECIES</button>
+      <button mat-raised-button color="primary" (click)="activeTab = 'types'">TOTAL TYPES</button>
     </div>
 
     <div class="tab-content" *ngIf="activeTab === 'species'">
@@ -119,4 +162,10 @@
       </ul>
     </div>
   </footer>
+</div>
+
+<div class="navigation-buttons" style="margin: 1rem 0; text-align: center;">
+  <button mat-raised-button color="accent" (click)="goToRecentlyViewed()">
+    Ver Historial Reciente
+  </button>
 </div>

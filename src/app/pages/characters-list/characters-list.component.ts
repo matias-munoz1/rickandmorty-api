@@ -1,44 +1,77 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RickAndMortyService, Character, GetCharactersResponse } from '../../services/rick-and-morty.service';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { Store } from '@ngrx/store';
+import { addRecentlyViewed } from '../../store/recently-viewed.actions';
+import { RICK_AND_MORTY_SERVICE } from '../../services/rick-and-morty.token';
+import { RickAndMortyServiceInterface, Character, GetCharactersResponse } from '../../services/rick-and-morty.interface';
+import { FavoritesService } from '../../services/rest/favorites.service';
 import { CharacterDetailComponent } from '../character-detail/character-detail.component';
-import { FavoritesService } from '../../services/favorites.service';
+import { HighlightOnHoverDirective } from '../../directives/highlight-on-hover.directive';
+import { TimeAgoPipe } from '../../pipes/time-ago.pipe'; 
 
 @Component({
   selector: 'app-characters-list',
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,
-    FormsModule,
-    CharacterDetailComponent 
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatTableModule,
+    CharacterDetailComponent,
+    HighlightOnHoverDirective,
+    MatIconModule,
+    TimeAgoPipe,
   ],
   templateUrl: './characters-list.component.html',
   styleUrls: ['./characters-list.component.scss']
 })
 export class CharactersListComponent implements OnInit {
-
   characters: Character[] = [];
   selectedCharacter: Character | null = null;
-  nameFilter: string = '';
-  statusFilter: string = '';
+
+  searchControl = new FormControl<string>('');
+  statusControl = new FormControl<string>('');
+
   currentPage: number = 1;
   totalPages: number = 0;
   activeTab: string = 'species';
-
   favoriteCharacter: Character | null = null;
 
+  displayedColumns: string[] = ['name','status','species','type','gender','created','favorite'];
+
   constructor(
-    private rickAndMortyService: RickAndMortyService,
-    private favoritesService: FavoritesService
+    @Inject(RICK_AND_MORTY_SERVICE) private rickAndMortyService: RickAndMortyServiceInterface,
+    private favoritesService: FavoritesService,
+    private router: Router,
+    private store: Store 
   ) {}
 
   ngOnInit(): void {
     this.fetchCharacters();
   }
+  
+  goToFavorites(): void {
+    this.router.navigate(['/favorites']);
+  }
 
   fetchCharacters(page: number = 1): void {
-    this.rickAndMortyService.getAllCharacters(page, this.nameFilter, this.statusFilter)
+    const nameFilter = this.searchControl.value || '';
+    const statusFilter = this.statusControl.value || '';
+
+    this.rickAndMortyService
+      .getAllCharacters(page, nameFilter, statusFilter)
       .subscribe({
         next: (response: GetCharactersResponse) => {
           this.characters = response.results;
@@ -52,19 +85,21 @@ export class CharactersListComponent implements OnInit {
   }
 
   onSearch(): void {
-
     this.fetchCharacters(1);
   }
 
   onSelectCharacter(character: Character): void {
     this.selectedCharacter = character;
+    this.store.dispatch(addRecentlyViewed({ character }));
   }
 
   onFavorite(character: Character): void {
     this.favoriteCharacter = character;
     this.favoritesService.setFavorite(character);
   }
-
+  goToRecentlyViewed(): void {
+    this.router.navigate(['/recently-viewed']);
+  }
   onSelectFavorite(): void {
     if (this.favoriteCharacter) {
       this.selectedCharacter = this.favoriteCharacter;
@@ -88,4 +123,10 @@ export class CharactersListComponent implements OnInit {
     });
     return Array.from(map, ([key, count]) => ({ key, count }));
   }
+
+  goBackToModeSelector(): void {
+    this.router.navigate(['']);
+  }
 }
+
+

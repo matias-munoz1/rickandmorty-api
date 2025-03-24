@@ -1,4 +1,4 @@
-// src/app/services/favorites.service.ts
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Character } from './rick-and-morty.service';

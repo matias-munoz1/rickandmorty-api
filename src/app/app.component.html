@@ -1,6 +1,5 @@
 <style>
   :host {
-   
     --bright-blue: oklch(51.01% 0.274 263.83);
     --electric-violet: oklch(53.18% 0.28 296.97);
     --french-violet: oklch(47.66% 0.246 305.88);
@@ -38,24 +37,20 @@
     text-align: center;
   }
   
-  .favorite-banner {
-    background-color: #f0f0f0;
-    padding: 1rem;
-    cursor: pointer;
-    margin-bottom: 1rem;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .favorite-details {
-    margin-top: 0.5rem;
-    border-top: 1px solid #ccc;
-    padding-top: 0.5rem;
+  .api-toggle {
+    margin: 1rem 0;
   }
 </style>
 
-<main class="main">
+<main class="main" [ngClass]="modeClass">
   <h1>{{ title }}</h1>
+
+  <div *ngIf="router.url.startsWith('/rest') || router.url.startsWith('/graphql')">
+    <app-random-character-widget></app-random-character-widget>
+    <div class="api-toggle">
+      <button (click)="goBackToModeSelector()">Cambiar API</button>
+    </div>
+  </div>
 
   <router-outlet></router-outlet>
 </main>

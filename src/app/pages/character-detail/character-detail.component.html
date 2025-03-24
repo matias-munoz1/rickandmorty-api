@@ -1,5 +1,5 @@
 <div class="card">
-  <h2>{{ character?.name }}</h2>
+  <h2>{{ character.name }}</h2>
   <div class="card-header">
     <img
       *ngIf="character?.image"
@@ -14,8 +14,8 @@
       <p><strong>Status:</strong> {{ character.status }}</p>
       <p><strong>Species:</strong> {{ character.species }}</p>
       <p><strong>Type:</strong> {{ character.type || 'Unknown' }}</p>
-      <p><strong>Gender:</strong> {{ character?.gender }}</p>
-      <p><strong>Created:</strong> {{ character?.created | date:'short' }}</p>
+      <p><strong>Gender:</strong> {{ character.gender }}</p>
+      <p><strong>Created:</strong> {{ character.created | date:'short' }}</p>
     </div>
 
     <div class="info-block">

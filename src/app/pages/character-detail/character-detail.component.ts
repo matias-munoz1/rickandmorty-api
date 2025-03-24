@@ -1,6 +1,7 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RickAndMortyService, Character } from '../../services/rick-and-morty.service';
+import { RICK_AND_MORTY_SERVICE } from '../../services/rick-and-morty.token';
+import { RickAndMortyServiceInterface, Character } from '../../services/rick-and-morty.interface';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -25,7 +26,7 @@ export class CharacterDetailComponent implements OnChanges {
   noLocation = false;
   noEpisode = false;
 
-  constructor(private rickAndMortyService: RickAndMortyService) {}
+  constructor(@Inject(RICK_AND_MORTY_SERVICE) private rickAndMortyService: RickAndMortyServiceInterface) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['character'] && this.character) {
@@ -45,7 +46,7 @@ export class CharacterDetailComponent implements OnChanges {
                 this.originResidentName = name;
               });
             } else {
-              this.originResidentName = null; 
+              this.originResidentName = null;
             }
           },
           error: () => {
@@ -53,7 +54,7 @@ export class CharacterDetailComponent implements OnChanges {
           }
         });
     } else {
-      this.noOrigin = true; 
+      this.noOrigin = true;
     }
 
     if (this.character.location?.url) {
@@ -75,11 +76,11 @@ export class CharacterDetailComponent implements OnChanges {
           }
         });
     } else {
-      this.noLocation = true; 
+      this.noLocation = true;
     }
 
     if (this.character.episode && this.character.episode.length > 0) {
-      const randomEpisodeUrl = this.character.episode[0];
+      const randomEpisodeUrl = this.character.episode[0].url!;
       this.rickAndMortyService.getEpisode(randomEpisodeUrl)
         .subscribe({
           next: (data) => {
@@ -90,7 +91,7 @@ export class CharacterDetailComponent implements OnChanges {
           }
         });
     } else {
-      this.noEpisode = true; 
+      this.noEpisode = true;
     }
   }
 
@@ -98,7 +99,6 @@ export class CharacterDetailComponent implements OnChanges {
     return this.rickAndMortyService.getLocation(url)
       .pipe(
         switchMap((residentData: any) => {
-
           return of(residentData.name || 'Desconocido');
         })
       );
