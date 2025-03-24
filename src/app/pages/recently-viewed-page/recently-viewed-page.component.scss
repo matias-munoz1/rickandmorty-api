@@ -25,7 +25,14 @@
         }
       }
     }
-  
+    .buttons button {
+      margin-right: 1rem;
+    }
+    
+    .buttons button:last-child {
+      margin-right: 0;
+    }
+    
     button {
       margin-bottom: 1rem;
       padding: 0.5rem 1rem;
